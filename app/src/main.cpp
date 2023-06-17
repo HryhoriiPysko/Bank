@@ -2,8 +2,9 @@
 
 #include <iostream>
 
-int main() {
-  BankClient user;
-  user.welcome();
-  user.logic();
+int main()
+{
+    BankClient client;
+    client.welcome();
+    client.logic();
 }

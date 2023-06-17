@@ -3,20 +3,29 @@
 #include "BankAccount.h"
 #include "Menu.h"
 
-#include <iostream>
+#include <memory>
 
-class BankClient {
+class IInformator;
+
+class BankClient
+{
 public:
-  BankClient();
+    BankClient();
 
-  void logic();
-  void welcome();
+    void logic();
+    void welcome();
 
 private:
-  void handleLogic(Menu::MenuAction action);
+    void processLogic(Menu::MenuAction action);
 
-  double amountOfMoney();
+    void mobileTopUp(double amount);
+    void withdrawFunds(double amount);
 
-  Menu _menu;
-  BankAccount _account;
+    void balanceInform() const;
+
+    double amountOfMoney() const;
+
+    Menu _menu;
+    BankAccount _account;
+    std::shared_ptr<IInformator> _informator;
 };

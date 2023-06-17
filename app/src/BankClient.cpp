@@ -1,65 +1,100 @@
 #include "BankClient.h"
 
-#include<cctype>
+#include "informator/InformType.h"
+#include "informator/bank_informator/bankinformator.h"
 
-BankClient::BankClient() : _account{1000}
+#include <cctype>
+#include <iostream>
+
+BankClient::BankClient() : _account{ 1000 }, _informator{ std::make_shared<BankInformator>() }
 {
 }
 
 void BankClient::logic()
-{	
-	while (_menu.action() != Menu::MenuAction::Exit)
-	{
-		_menu.draw();
-		_menu.chooseAction();
-		system("cls");
+{
+    while (_menu.action() != Menu::MenuAction::Exit)
+    {
+        _menu.draw();
+        _menu.chooseAction();
+        system("cls");
 
-		handleLogic(_menu.action());
-
-	}
+        processLogic(_menu.action());
+    }
 }
 
 void BankClient::welcome()
 {
-	std::cout << "\t\t\t\t Welcome to the bank account!!!" << std::endl;
+    _informator->inform(InformType::Welcome);
 }
 
-void BankClient::handleLogic(Menu::MenuAction action)
+void BankClient::processLogic(Menu::MenuAction action)
 {
-	switch (action)
-	{
-	case Menu::MenuAction::ShowBalance:
-		std::cout << "On your account: " << _account.balance() << std::endl;
-		break;
-	case Menu::MenuAction::Widhdraw:
-		_account.withdrawFunds(amountOfMoney());
-
-		std::cout << "On your account: " << _account.balance() << std::endl;
-
-		break;
-	case Menu::MenuAction::TopUp:
-
-		_account.mobileTopUp(amountOfMoney());
-		std::cout << "On your account: " << _account.balance() << std::endl;
-		break;
-	case Menu::MenuAction::Exit:
-
-		std::cout << "\t\t\t\t Thank you for using our bank !!!" << std::endl;
-
-		break;
-
-	default:
-
-		std::cout << "Please enter a number" << std::endl;
-
-		break;
-	}
+    switch (action)
+    {
+    case Menu::MenuAction::ShowBalance:
+        std::cout << "On your account: " << _account.balance() << std::endl;
+        break;
+    case Menu::MenuAction::Widhdraw:
+        withdrawFunds(amountOfMoney());
+        break;
+    case Menu::MenuAction::TopUp:
+        mobileTopUp(amountOfMoney());
+        break;
+    case Menu::MenuAction::Exit:
+        std::cout << "\t\t\t\t Thank you for using our bank !!!" << std::endl;
+        break;
+    case Menu::MenuAction::None:
+        break;
+    }
 }
 
-double BankClient::amountOfMoney()
+void BankClient::mobileTopUp(double amount)
 {
-	double amount{0.};
-	std::cout << "Enter amount: ";
-	std::cin >> amount;
-	return amount;
+    if (amount <= 0)
+    {
+        _informator->inform(InformType::ErrorInput);
+        return;
+    }
+    if (_account.balance() < amount)
+    {
+        _informator->inform(InformType::ErrorWithdraw);
+        return;
+    }
+
+    _account.withdrawFunds(amount);
+    _informator->inform(InformType::SuccessWithdraw);
+
+    balanceInform();
+}
+
+void BankClient::withdrawFunds(double amount)
+{
+    if (amount <= 0)
+    {
+        _informator->inform(InformType::ErrorInput);
+        return;
+    }
+    if (_account.balance() < amount)
+    {
+        _informator->inform(InformType::ErrorWithdraw);
+        return;
+    }
+
+    _account.withdrawFunds(amount);
+    _informator->inform(InformType::SuccessWithdraw);
+
+    balanceInform();
+}
+
+void BankClient::balanceInform() const
+{
+    std::cout << "On your account: " << _account.balance() << std::endl;
+}
+
+double BankClient::amountOfMoney() const
+{
+    double amount{ 0. };
+    std::cout << "Enter amount: ";
+    std::cin >> amount;
+    return amount;
 }

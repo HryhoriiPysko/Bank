@@ -1,17 +1,16 @@
 #pragma once
 
-#include<iostream>
+#include <iostream>
 
 class BankAccount
 {
 public:
-	BankAccount(double funds);
+    BankAccount(double funds);
 
-	double balance();
-	double withdrawFunds(double amount);
-	double mobileTopUp(double amount);
+    double balance() const;
+
+    void withdrawFunds(double amount);
 
 private:
-	double _fund;
+    double _fund;
 };
-

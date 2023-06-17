@@ -3,21 +3,20 @@
 class Menu
 {
 public:
-	enum class MenuAction
-	{
-		None = 0,
-		ShowBalance,
-		Widhdraw,
-		TopUp,
-		Exit
-	};
+    enum class MenuAction
+    {
+        None = 0,
+        ShowBalance,
+        Widhdraw,
+        TopUp,
+        Exit
+    };
 
-	void draw();
-	void chooseAction();
+    void draw() const;
+    void chooseAction();
 
-	MenuAction action() const;
+    MenuAction action() const;
 
 private:
-	MenuAction _action{ MenuAction::None };
+    MenuAction _action{ MenuAction::None };
 };
-
