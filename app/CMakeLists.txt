@@ -9,6 +9,7 @@ set(HEADER_FILES
     src/informator/IInformator.h
     src/informator/InformType.h
     src/informator/bank_informator/bankinformator.h
+    src/controller/inputcontroller.h
 )
 
 set(SOURCE_FILES
@@ -20,6 +21,7 @@ set(SOURCE_FILES
     src/BankAccount.cpp
 
     src/informator/bank_informator/bankinformator.cpp
+     src/controller/inputcontroller.cpp
 )
 
 include_directories(
