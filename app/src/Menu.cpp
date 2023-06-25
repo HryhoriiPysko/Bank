@@ -1,7 +1,10 @@
 #include "Menu.h"
 
+#include "controller/inputcontroller.h"
+
 #include <iostream>
 
+#include "controller/inputcontroller.h"
 void Menu::draw() const
 {
     std::cout << std::endl;
@@ -15,9 +18,8 @@ void Menu::draw() const
 
 void Menu::chooseAction()
 {
-    int value;
-    std::cin >> value;
-    _action = MenuAction(value);
+    InputController inputChoice;
+    _action = MenuAction(inputChoice.InputProcess());
 }
 
 Menu::MenuAction Menu::action() const
